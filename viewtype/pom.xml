@@ -16,7 +16,6 @@
   <name>Viewtype</name>
   <description />
 
-
   <dependencies>
     <!-- Vitruvius dependencies -->
     <dependency>
@@ -32,4 +31,42 @@
       <artifactId>tools.vitruv.framework.views</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-source-neojoin</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.basedir}/src/main/neojoin</source>
+                <source>${project.build.directory}/generated-sources/neojoin</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>tools.vitruv.compmodelcons</groupId>
+        <artifactId>neojoin-maven-plugin</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <id>generate-neojoin-sources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
