@@ -3,6 +3,7 @@ package tools.vitruv.methodologisttemplate.vsum;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -17,6 +18,8 @@ import org.junit.jupiter.api.io.TempDir;
 import mir.reactions.model2Model2.Model2Model2ChangePropagationSpecification;
 import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.change.testutils.TestUserInteraction;
+import tools.vitruv.compmodelcons.change.ViewChangePropagationSpecificationAdapter;
+import tools.vitruv.compmodelcons.change.ViewChangePropagationSpecificationAdapterFactory;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.views.ViewTypeFactory;
@@ -26,6 +29,8 @@ import tools.vitruv.framework.vsum.internal.InternalVirtualModel;
 import tools.vitruv.methodologisttemplate.model.model.ModelFactory;
 import tools.vitruv.methodologisttemplate.model.model.System;
 import tools.vitruv.methodologisttemplate.model.model2.Root;
+import tools.vitruv.methodologisttemplate.viewtype.ModelAsModel2ViewType;
+import tools.vitruv.methodologisttemplate.viewtype.ModelAsModelViewTypeChangePropagationParticipationSpecification;
 
 /**
  * This class provides an example how to define and use a VSUM.
@@ -122,6 +127,50 @@ public class VSUMExampleTest {
     }));
   }
 
+  // @Test // todo: get green
+  void complexViewUsage(@TempDir Path tempDir) {
+    VirtualModel vsum = createDefaultVirtualModel(tempDir);
+    addSystem(vsum, tempDir);
+
+    modifyView(getDefaultView(vsum, List.of(System.class)).withChangeDerivingTrait(), (CommittableView v) -> {
+      var system = v.getRootObjects(System.class).iterator().next();
+
+      var component = ModelFactory.eINSTANCE.createComponent();
+      component.setName("oldName");
+      system.getComponents().add(component);
+    });
+
+    modifyView(getComplexView(vsum).withChangeDerivingTrait(), (CommittableView v) -> {
+      v.getRootObjects(Root.class).iterator().next().getEntities().get(0).setName("newName");
+    });
+
+    Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(System.class)), (View v) -> {
+      var system = v.getRootObjects(System.class).iterator().next();
+      return system.getLinks().size() == 1
+              && system.getLinks().get(0).getComponents().size() == 1
+              && system.getLinks().get(0).getComponents().stream()
+              .allMatch(c -> c.getName().startsWith("newName"));
+    }));
+  }
+
+  @Test
+    // todo: get green
+  void insertComponentUsingViewBasedConsistency(@TempDir Path tempDir) {
+    InternalVirtualModel vsum = createViewBasedVirtualModel(tempDir);
+    addSystem(vsum, tempDir);
+    addComponent(vsum);
+    Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(System.class, Root.class)), (View v) -> {
+      // assert that a component has been inserted, a entity has been created and that
+      // both have the same name
+      // Note: to make the test result easier to understand, these different effects
+      // should be tested one by one
+      return v.getRootObjects(System.class).iterator().next()
+              .getComponents().get(0).getName()
+              .equals(v.getRootObjects(Root.class).iterator().next()
+                      .getEntities().get(0).getName());
+    }));
+  }
+
   @Test
   void deleteComponent(@TempDir Path tempDir) {
     VirtualModel vsum = createDefaultVirtualModel(tempDir);
@@ -213,6 +262,19 @@ public class VSUMExampleTest {
     return model;
   }
 
+  private InternalVirtualModel createViewBasedVirtualModel(Path projectPath) {
+    InternalVirtualModel model = new VirtualModelBuilder()
+            .withStorageFolder(projectPath)
+            .withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(new TestUserInteraction()))
+            .withChangePropagationSpecifications(ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
+                    Optional.of(new ModelAsModelViewTypeChangePropagationParticipationSpecification()),
+                    new Model2Model2ChangePropagationSpecification(),
+                    Optional.empty()))
+            .buildAndInitialize();
+    model.setChangePropagationMode(ChangePropagationMode.TRANSITIVE_CYCLIC);
+    return model;
+  }
+
   // See https://github.com/vitruv-tools/Vitruv/issues/717 for more information
   // about the rootTypes
   private View getDefaultView(VirtualModel vsum, Collection<Class<?>> rootTypes) {
@@ -221,6 +283,11 @@ public class VSUMExampleTest {
         .filter(element -> rootTypes.stream().anyMatch(it -> it.isInstance(element)))
         .forEach(it -> selector.setSelected(it, true));
     return selector.createView();
+  }
+
+  private View getComplexView(VirtualModel vsum) {
+    return vsum.createSelector(new ModelAsModel2ViewType("default")).createView();
+    // todo: complete
   }
 
   // These functions are only for convience, as they make the code a bit better

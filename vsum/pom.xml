@@ -46,6 +46,7 @@
         <dependency>
             <groupId>tools.vitruv</groupId>
             <artifactId>tools.vitruv.framework.views</artifactId>
+            <version>3.2.4-compmodelcons-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>tools.vitruv</groupId>
@@ -61,6 +62,18 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>tools.vitruv.compmodelcons</groupId>
+            <artifactId>tools.vitruv.compmodelcons.views</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>tools.vitruv</groupId>
+            <artifactId>tools.vitruv.methodologisttemplate.viewtype</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
