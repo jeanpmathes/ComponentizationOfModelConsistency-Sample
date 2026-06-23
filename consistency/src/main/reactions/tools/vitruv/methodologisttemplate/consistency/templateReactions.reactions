@@ -1,4 +1,3 @@
-
 import java.io.File;
 
 import "http://vitruv.tools/methodologisttemplate/model" as model

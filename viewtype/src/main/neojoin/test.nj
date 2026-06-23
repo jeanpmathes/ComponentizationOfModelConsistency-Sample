@@ -1,0 +1,9 @@
+export v to "http://vitruv.tools/methodologisttemplate/v"
+
+import "http://vitruv.tools/methodologisttemplate/model"
+import "http://vitruv.tools/methodologisttemplate/model2"
+
+from Component c
+create {
+    c.name
+}
