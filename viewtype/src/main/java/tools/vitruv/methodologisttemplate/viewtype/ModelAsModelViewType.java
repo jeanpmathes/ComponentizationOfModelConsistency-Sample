@@ -10,10 +10,7 @@ import tools.vitruv.change.correspondence.Correspondence;
 import tools.vitruv.change.correspondence.view.CorrespondenceModelView;
 import tools.vitruv.change.correspondence.view.EditableCorrespondenceModelView;
 import tools.vitruv.compmodelcons.views.impl.ChangeSpecificationAwareViewType;
-import tools.vitruv.compmodelcons.views.impl.TransformingViewType;
 import tools.vitruv.methodologisttemplate.model.model.ModelPackage;
-import tools.vitruv.methodologisttemplate.model.model.System;
-import tools.vitruv.methodologisttemplate.model.model2.Model2Factory;
 import tools.vitruv.methodologisttemplate.model.model2.Model2Package;
 import tools.vitruv.methodologisttemplate.model.model2.Root;
 
@@ -21,10 +18,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public class ModelAsModel2ViewType extends ChangeSpecificationAwareViewType { // todo: remove when generated
-    private static final EPackage metamodel = Model2Package.eINSTANCE;
+public class ModelAsModelViewType extends ChangeSpecificationAwareViewType { // todo: remove when generated
+    private static final EPackage metamodel = ModelPackage.eINSTANCE;
 
-    public ModelAsModel2ViewType(String name) {
+    public ModelAsModelViewType(String name) {
         super(name, metamodel);
     }
 

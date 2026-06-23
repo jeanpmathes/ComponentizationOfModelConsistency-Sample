@@ -18,7 +18,6 @@ import org.junit.jupiter.api.io.TempDir;
 import mir.reactions.model2Model2.Model2Model2ChangePropagationSpecification;
 import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.change.testutils.TestUserInteraction;
-import tools.vitruv.compmodelcons.change.ViewChangePropagationSpecificationAdapter;
 import tools.vitruv.compmodelcons.change.ViewChangePropagationSpecificationAdapterFactory;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
@@ -30,7 +29,6 @@ import tools.vitruv.methodologisttemplate.model.model.ModelFactory;
 import tools.vitruv.methodologisttemplate.model.model.System;
 import tools.vitruv.methodologisttemplate.model.model2.Root;
 import tools.vitruv.methodologisttemplate.viewtype.ModelAsModel2ViewType;
-import tools.vitruv.methodologisttemplate.viewtype.ModelAsModelViewTypeChangePropagationParticipationSpecification;
 
 /**
  * This class provides an example how to define and use a VSUM.
@@ -266,8 +264,8 @@ public class VSUMExampleTest {
     InternalVirtualModel model = new VirtualModelBuilder()
             .withStorageFolder(projectPath)
             .withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(new TestUserInteraction()))
-            .withChangePropagationSpecifications(ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
-                    Optional.of(new ModelAsModelViewTypeChangePropagationParticipationSpecification()),
+            .withChangePropagationSpecifications(ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
+                    Optional.of(new ModelAsModel2ViewType("default")),
                     new Model2Model2ChangePropagationSpecification(),
                     Optional.empty()))
             .buildAndInitialize();
