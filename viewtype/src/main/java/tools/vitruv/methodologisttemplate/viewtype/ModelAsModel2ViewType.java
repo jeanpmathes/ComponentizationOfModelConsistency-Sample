@@ -29,15 +29,6 @@ public class ModelAsModel2ViewType extends ChangeSpecificationAwareViewType { //
     }
 
     @Override
-    protected void generateView(Collection<Resource> sources, Optional<CorrespondenceModelView<? extends Correspondence>> correspondenceModel, List<Resource> target) {
-    }
-
-    @Override
-    protected VitruviusChange<Uuid> transformChange(Collection<Resource> sources, Optional<EditableCorrespondenceModelView<? extends Correspondence>> correspondenceModel, VitruviusChange<HierarchicalId> change) {
-        return null;
-    }
-
-    @Override
     protected Collection<Class<?>> getRootTypes() {
         return List.of(Root.class);
     }
