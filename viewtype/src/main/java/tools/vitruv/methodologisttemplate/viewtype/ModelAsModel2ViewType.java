@@ -2,24 +2,15 @@ package tools.vitruv.methodologisttemplate.viewtype;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
-import tools.vitruv.change.atomic.hid.HierarchicalId;
-import tools.vitruv.change.atomic.uuid.Uuid;
 import tools.vitruv.change.composite.MetamodelDescriptor;
-import tools.vitruv.change.composite.description.VitruviusChange;
-import tools.vitruv.change.correspondence.Correspondence;
-import tools.vitruv.change.correspondence.view.CorrespondenceModelView;
-import tools.vitruv.change.correspondence.view.EditableCorrespondenceModelView;
-import tools.vitruv.compmodelcons.views.impl.ChangeSpecificationAwareViewType;
-import tools.vitruv.compmodelcons.views.impl.TransformingViewType;
+import tools.vitruv.compmodelcons.change.ChangeSpecificationAwareViewType;
+import tools.vitruv.compmodelcons.views.operations.Operation;
 import tools.vitruv.methodologisttemplate.model.model.ModelPackage;
-import tools.vitruv.methodologisttemplate.model.model.System;
-import tools.vitruv.methodologisttemplate.model.model2.Model2Factory;
 import tools.vitruv.methodologisttemplate.model.model2.Model2Package;
 import tools.vitruv.methodologisttemplate.model.model2.Root;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 public class ModelAsModel2ViewType extends ChangeSpecificationAwareViewType { // todo: remove when generated
     private static final EPackage metamodel = Model2Package.eINSTANCE;
@@ -41,5 +32,10 @@ public class ModelAsModel2ViewType extends ChangeSpecificationAwareViewType { //
     @Override
     public MetamodelDescriptor getViewTypeMetamodelDescriptor() {
         return MetamodelDescriptor.of(metamodel);
+    }
+
+    @Override
+    protected Operation createStructure(Resource model) {
+        return null;
     }
 }
