@@ -24,8 +24,8 @@ public class ModelAsModel2ViewType extends ChangeSpecificationAwareViewType { //
     }
 
     @Override
-    public MetamodelDescriptor getOriginMetamodelDescriptor() {
-        return MetamodelDescriptor.of(ModelPackage.eINSTANCE);
+    public List<MetamodelDescriptor> getOriginMetamodelDescriptors() {
+        return List.of(MetamodelDescriptor.of(ModelPackage.eINSTANCE));
     }
 
     @Override
