@@ -1,7 +1,6 @@
 package tools.vitruv.methodologisttemplate.viewtype;
 
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.resource.Resource;
 import tools.vitruv.change.composite.MetamodelDescriptor;
 import tools.vitruv.compmodelcons.change.ChangeSpecificationAwareViewType;
 import tools.vitruv.compmodelcons.views.operations.Operation;
@@ -34,7 +33,7 @@ public class ModelAsModelViewType extends ChangeSpecificationAwareViewType { // 
     }
 
     @Override
-    protected Operation createStructure(Resource model) {
+    protected Operation createStructure() {
         return null;
     }
 }
