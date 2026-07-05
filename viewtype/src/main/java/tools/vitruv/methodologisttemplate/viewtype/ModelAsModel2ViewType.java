@@ -6,9 +6,7 @@ import tools.vitruv.compmodelcons.change.ChangeSpecificationAwareViewType;
 import tools.vitruv.compmodelcons.views.operations.Operation;
 import tools.vitruv.methodologisttemplate.model.model.ModelPackage;
 import tools.vitruv.methodologisttemplate.model.model2.Model2Package;
-import tools.vitruv.methodologisttemplate.model.model2.Root;
 
-import java.util.Collection;
 import java.util.List;
 
 public class ModelAsModel2ViewType extends ChangeSpecificationAwareViewType { // todo: remove when generated
@@ -16,11 +14,6 @@ public class ModelAsModel2ViewType extends ChangeSpecificationAwareViewType { //
 
     public ModelAsModel2ViewType(String name) {
         super(name, metamodel);
-    }
-
-    @Override
-    protected Collection<Class<?>> getRootTypes() {
-        return List.of(Root.class);
     }
 
     @Override
