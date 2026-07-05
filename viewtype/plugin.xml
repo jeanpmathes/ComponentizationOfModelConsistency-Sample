@@ -14,4 +14,12 @@
               genModel="target/generated-sources/neojoin/ecore/v/test.genmodel"/>
    </extension>
 
+    <extension point="org.eclipse.emf.ecore.generated_package">
+        <!-- @generated example -->
+        <package
+                uri="http://vitruv.tools/methodologisttemplate/example"
+                class="neojoin.viewtypes.example.ExamplePackage"
+                genModel="target/generated-sources/neojoin/ecore/example/example.genmodel"/>
+    </extension>
+
 </plugin>

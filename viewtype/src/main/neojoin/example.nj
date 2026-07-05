@@ -1,9 +1,9 @@
-export v to "http://vitruv.tools/methodologisttemplate/v"
+export example to "http://vitruv.tools/methodologisttemplate/example"
 
 import "http://vitruv.tools/methodologisttemplate/model"
 import "http://vitruv.tools/methodologisttemplate/model2"
 
 from Component c
-create root X {
+create Thing {
 
 }
