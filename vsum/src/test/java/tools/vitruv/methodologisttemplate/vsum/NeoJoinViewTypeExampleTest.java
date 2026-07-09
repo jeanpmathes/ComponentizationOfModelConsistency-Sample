@@ -8,20 +8,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
-import tools.vitruv.framework.views.ViewSelector;
-import tools.vitruv.framework.views.ViewType;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.methodologisttemplate.model.model.ModelFactory;
+import tools.vitruv.methodologisttemplate.model.model.ModelPackage;
 import tools.vitruv.methodologisttemplate.model.model.System;
+import tools.vitruv.methodologisttemplate.model.model2.Model2Package;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class NeoJoinViewTypeExampleTest extends AbstractTest {
     @Test
     void deleteComponentUsingExampleView(@TempDir Path tempDir) {
-        VirtualModel vsum = createDefaultVirtualModel(tempDir);
+        VirtualModel vsum = createVirtualModel(tempDir);
         addSystem(vsum, tempDir);
 
         modifyView(getDefaultView(vsum, List.of(System.class)).withChangeRecordingTrait(), (CommittableView v) -> {
@@ -36,7 +35,7 @@ public class NeoJoinViewTypeExampleTest extends AbstractTest {
             system.getComponents().add(component2);
         });
 
-        modifyView(getView(vsum, ExampleViewType::new).withChangeDerivingTrait(), (CommittableView v) -> {
+        modifyView(getView(vsum).withChangeDerivingTrait(), (CommittableView v) -> {
             Root root = v.getRootObjects(Root.class).iterator().next();
 
             root.getAllThings().remove(0);
@@ -51,10 +50,10 @@ public class NeoJoinViewTypeExampleTest extends AbstractTest {
 
     @Test
     void addComponentUsingExampleView(@TempDir Path tempDir) {
-        VirtualModel vsum = createDefaultVirtualModel(tempDir);
+        VirtualModel vsum = createVirtualModel(tempDir);
         addSystem(vsum, tempDir);
 
-        modifyView(getView(vsum, ExampleViewType::new).withChangeDerivingTrait(), (CommittableView v) -> {
+        modifyView(getView(vsum).withChangeDerivingTrait(), (CommittableView v) -> {
             Root root = v.getRootObjects(Root.class).iterator().next();
 
             root.getAllThings().add(ExampleFactory.eINSTANCE.createThing());
@@ -69,12 +68,12 @@ public class NeoJoinViewTypeExampleTest extends AbstractTest {
 
     @Test
     void renameComponentUsingExampleView(@TempDir Path tempDir) {
-        VirtualModel vsum = createDefaultVirtualModel(tempDir);
+        VirtualModel vsum = createVirtualModel(tempDir);
         addSystem(vsum, tempDir);
         addComponent(vsum, "OldName1");
         addComponent(vsum, "OldName2");
 
-        modifyView(getView(vsum, ExampleViewType::new).withChangeDerivingTrait(), (CommittableView v) -> {
+        modifyView(getView(vsum).withChangeDerivingTrait(), (CommittableView v) -> {
             Root root = v.getRootObjects(Root.class).iterator().next();
             root.getAllThings().get(0).setName("NewName1");
             root.getAllThings().get(1).setName("NewName2");
@@ -88,8 +87,15 @@ public class NeoJoinViewTypeExampleTest extends AbstractTest {
         }));
     }
 
-    private View getView(VirtualModel vsum, Supplier<ViewType<? extends ViewSelector>> viewTypeSupplier) {
+    private VirtualModel createVirtualModel(Path tempDir) {
+        // The view type loads the metamodels using their URI, so they are not automatically added to the registry.
+        ModelPackage.eINSTANCE.eClass();
+        Model2Package.eINSTANCE.eClass();
 
-        return vsum.createSelector(viewTypeSupplier.get()).createView();
+        return createDefaultVirtualModel(tempDir, List.of(new ExampleViewType()));
+    }
+
+    private View getView(VirtualModel vsum) {
+        return vsum.createSelector(vsum.getViewTypes().stream().filter(viewType -> viewType.getName().equals(ExampleViewType.NAME)).findAny().orElseThrow()).createView();
     }
 }

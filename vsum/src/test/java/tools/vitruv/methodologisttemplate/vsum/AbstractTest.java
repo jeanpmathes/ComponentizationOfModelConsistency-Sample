@@ -9,6 +9,7 @@ import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.change.testutils.TestUserInteraction;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
+import tools.vitruv.framework.views.ViewType;
 import tools.vitruv.framework.views.ViewTypeFactory;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.framework.vsum.VirtualModelBuilder;
@@ -61,10 +62,15 @@ public class AbstractTest {
     }
 
     protected InternalVirtualModel createDefaultVirtualModel(Path projectPath) {
+        return createDefaultVirtualModel(projectPath, List.of());
+    }
+
+    protected InternalVirtualModel createDefaultVirtualModel(Path projectPath, List<ViewType<?>> viewTypes) {
         InternalVirtualModel model = new VirtualModelBuilder()
                 .withStorageFolder(projectPath)
                 .withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(new TestUserInteraction()))
                 .withChangePropagationSpecifications(new Model2Model2ChangePropagationSpecification())
+                .withViewTypes(viewTypes)
                 .buildAndInitialize();
         model.setChangePropagationMode(ChangePropagationMode.TRANSITIVE_CYCLIC);
         return model;
