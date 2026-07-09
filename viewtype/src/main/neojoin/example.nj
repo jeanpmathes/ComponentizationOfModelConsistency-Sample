@@ -5,5 +5,5 @@ import "http://vitruv.tools/methodologisttemplate/model2"
 
 from Component c
 create Thing {
-
+    c.name
 }

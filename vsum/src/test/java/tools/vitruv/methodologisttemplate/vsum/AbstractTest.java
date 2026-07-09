@@ -39,10 +39,14 @@ public class AbstractTest {
     }
 
     protected void addComponent(VirtualModel vsum) {
+        addComponent(vsum, "specialname");
+    }
+
+    protected void addComponent(VirtualModel vsum, String name) {
         CommittableView view = getDefaultView(vsum, List.of(tools.vitruv.methodologisttemplate.model.model.System.class)).withChangeDerivingTrait();
         modifyView(view, (CommittableView v) -> {
             var component = ModelFactory.eINSTANCE.createComponent();
-            component.setName("specialname");
+            component.setName(name);
             v.getRootObjects(tools.vitruv.methodologisttemplate.model.model.System.class).iterator().next().getComponents().add(component);
         });
     }

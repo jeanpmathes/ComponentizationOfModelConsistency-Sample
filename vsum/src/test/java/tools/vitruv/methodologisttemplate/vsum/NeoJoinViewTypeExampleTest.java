@@ -44,7 +44,8 @@ public class NeoJoinViewTypeExampleTest extends AbstractTest {
 
         Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(System.class)), (View v) -> {
             var system = v.getRootObjects(System.class).iterator().next();
-            return system.getComponents().size() == 1 && system.getComponents().get(0).getName().equals("Component2");
+            return system.getComponents().size() == 1
+                    && system.getComponents().get(0).getName().equals("Component2");
         }));
     }
 
@@ -63,6 +64,27 @@ public class NeoJoinViewTypeExampleTest extends AbstractTest {
         Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(System.class)), (View v) -> {
             var system = v.getRootObjects(System.class).iterator().next();
             return system.getComponents().size() == 2;
+        }));
+    }
+
+    @Test
+    void renameComponentUsingExampleView(@TempDir Path tempDir) {
+        VirtualModel vsum = createDefaultVirtualModel(tempDir);
+        addSystem(vsum, tempDir);
+        addComponent(vsum, "OldName1");
+        addComponent(vsum, "OldName2");
+
+        modifyView(getView(vsum, ExampleViewType::new).withChangeDerivingTrait(), (CommittableView v) -> {
+            Root root = v.getRootObjects(Root.class).iterator().next();
+            root.getAllThings().get(0).setName("NewName1");
+            root.getAllThings().get(1).setName("NewName2");
+        });
+
+        Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(System.class)), (View v) -> {
+            var system = v.getRootObjects(System.class).iterator().next();
+            return system.getComponents().size() == 2
+                    && system.getComponents().get(0).getName().equals("NewName1")
+                    && system.getComponents().get(1).getName().equals("NewName2");
         }));
     }
 
