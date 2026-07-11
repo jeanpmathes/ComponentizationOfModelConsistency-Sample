@@ -53,10 +53,14 @@ public class AbstractTest {
     }
 
     protected void addRouter(VirtualModel vsum) {
+        addRouter(vsum, "specialRouterName");
+    }
+
+    protected void addRouter(VirtualModel vsum, String name) {
         CommittableView view = getDefaultView(vsum, List.of(tools.vitruv.methodologisttemplate.model.model.System.class)).withChangeDerivingTrait();
         modifyView(view, (CommittableView v) -> {
             var component = ModelFactory.eINSTANCE.createRouter();
-            component.setName("specialRouterName");
+            component.setName(name);
             v.getRootObjects(System.class).iterator().next().getComponents().add(component);
         });
     }

@@ -17,7 +17,7 @@ import tools.vitruv.methodologisttemplate.model.model2.Model2Package;
 import java.nio.file.Path;
 import java.util.List;
 
-public class NeoJoinViewTypeExampleTest extends AbstractTest {
+public class ExampleViewTypeTest extends AbstractTest {
     @Test
     void deleteComponentUsingExampleView(@TempDir Path tempDir) {
         VirtualModel vsum = createVirtualModel(tempDir);
