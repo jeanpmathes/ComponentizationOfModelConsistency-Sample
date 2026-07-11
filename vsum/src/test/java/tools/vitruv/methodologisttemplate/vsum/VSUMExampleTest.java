@@ -44,7 +44,7 @@ public class VSUMExampleTest extends AbstractTest {
     // assert that the directly added System is present
     Assertions.assertEquals(1, getDefaultView(vsum, List.of(System.class)).getRootObjects().size());
     // as well as the Root that should be created by the Reactions, see
-    // templateReactions.reactions#14
+    // model2Model2.reactions#14
     Assertions.assertEquals(1, getDefaultView(vsum, List.of(Root.class)).getRootObjects().size());
   }
 

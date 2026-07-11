@@ -7,20 +7,12 @@
 <plugin>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated test -->
-      <package
-              uri="http://vitruv.tools/methodologisttemplate/v"
-              class="neojoin.viewtypes.v.VPackage"
-              genModel="target/generated-sources/neojoin/ecore/v/test.genmodel"/>
+       <!-- @generated example -->
+       <package
+               uri="http://vitruv.tools/methodologisttemplate/example"
+               class="neojoin.viewtypes.example.ExamplePackage"
+               genModel="target/generated-sources/neojoin/ecore/example/example.genmodel"/>
    </extension>
-
-    <extension point="org.eclipse.emf.ecore.generated_package">
-        <!-- @generated example -->
-        <package
-                uri="http://vitruv.tools/methodologisttemplate/example"
-                class="neojoin.viewtypes.example.ExamplePackage"
-                genModel="target/generated-sources/neojoin/ecore/example/example.genmodel"/>
-    </extension>
 
     <extension point="org.eclipse.emf.ecore.generated_package">
         <!-- @generated model_identity -->
