@@ -10,9 +10,7 @@ import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.methodologisttemplate.model.model.ModelFactory;
-import tools.vitruv.methodologisttemplate.model.model.ModelPackage;
 import tools.vitruv.methodologisttemplate.model.model.System;
-import tools.vitruv.methodologisttemplate.model.model2.Model2Package;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -88,10 +86,6 @@ public class ExampleViewTypeTest extends AbstractTest {
     }
 
     private VirtualModel createVirtualModel(Path tempDir) {
-        // The view type loads the metamodels using their URI, so they are not automatically added to the registry.
-        ModelPackage.eINSTANCE.eClass();
-        Model2Package.eINSTANCE.eClass();
-
         return createDefaultVirtualModel(tempDir, List.of(new ExampleViewType()));
     }
 
