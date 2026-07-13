@@ -3,24 +3,27 @@ package tools.vitruv.methodologisttemplate.vsum;
 import mir.reactions.modelView2ModelView2.ModelView2ModelView2ChangePropagationSpecification;
 import neojoin.viewtypes.model2_identity.Model2IdentityViewType;
 import neojoin.viewtypes.model_identity.ModelIdentityViewType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.change.testutils.TestUserInteraction;
 import tools.vitruv.compmodelcons.change.ViewChangePropagationSpecificationAdapterFactory;
+import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.framework.vsum.VirtualModelBuilder;
 import tools.vitruv.framework.vsum.internal.InternalVirtualModel;
+import tools.vitruv.methodologisttemplate.model.model.System;
+import tools.vitruv.methodologisttemplate.model.model2.Root;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 
 public class ComponentizedConsistencyExampleTest extends AbstractTest {
     @Test
     void insertComponentUsingViewBasedConsistency(@TempDir Path tempDir) {
         VirtualModel vsum = createVirtualModel(tempDir);
-
-        /*
 
         addSystem(vsum, tempDir);
         addComponent(vsum);
@@ -31,8 +34,6 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
 
             return component.getName().equals(entity.getName());
         }));
-
-        */
     }
 
     private InternalVirtualModel createVirtualModel(Path projectPath) {
