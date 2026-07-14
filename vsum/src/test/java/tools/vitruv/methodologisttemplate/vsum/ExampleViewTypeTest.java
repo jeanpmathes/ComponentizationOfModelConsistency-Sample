@@ -12,12 +12,13 @@ import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.methodologisttemplate.model.model.ModelFactory;
 import tools.vitruv.methodologisttemplate.model.model.System;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
 public class ExampleViewTypeTest extends AbstractTest {
     @Test
-    void deleteComponentUsingExampleView(@TempDir Path tempDir) {
+    void deleteComponentUsingExampleView(@TempDir Path tempDir) throws IOException {
         VirtualModel vsum = createVirtualModel(tempDir);
         addSystem(vsum, tempDir);
 
@@ -47,7 +48,7 @@ public class ExampleViewTypeTest extends AbstractTest {
     }
 
     @Test
-    void addComponentUsingExampleView(@TempDir Path tempDir) {
+    void addComponentUsingExampleView(@TempDir Path tempDir) throws IOException {
         VirtualModel vsum = createVirtualModel(tempDir);
         addSystem(vsum, tempDir);
 
@@ -65,7 +66,7 @@ public class ExampleViewTypeTest extends AbstractTest {
     }
 
     @Test
-    void renameComponentUsingExampleView(@TempDir Path tempDir) {
+    void renameComponentUsingExampleView(@TempDir Path tempDir) throws IOException {
         VirtualModel vsum = createVirtualModel(tempDir);
         addSystem(vsum, tempDir);
         addComponent(vsum, "OldName1");
@@ -85,7 +86,7 @@ public class ExampleViewTypeTest extends AbstractTest {
         }));
     }
 
-    private VirtualModel createVirtualModel(Path tempDir) {
+    private VirtualModel createVirtualModel(Path tempDir) throws IOException {
         return createDefaultVirtualModel(tempDir, List.of(new ExampleViewType()));
     }
 

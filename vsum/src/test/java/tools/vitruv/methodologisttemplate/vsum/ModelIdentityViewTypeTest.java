@@ -11,12 +11,13 @@ import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.methodologisttemplate.model.model2.Root;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
 public class ModelIdentityViewTypeTest extends AbstractTest {
     @Test
-    void insertComponent(@TempDir Path tempDir) {
+    void insertComponent(@TempDir Path tempDir) throws IOException {
         VirtualModel vsum = createVirtualModel(tempDir);
 
         addSystem(vsum, tempDir);
@@ -25,12 +26,12 @@ public class ModelIdentityViewTypeTest extends AbstractTest {
         Assertions.assertTrue(assertView(getView(vsum), (View v) -> {
             var system = v.getRootObjects(System.class).iterator().next();
             return system.getComponents().size() == 1
-                    && system.getComponents().get(0).getName().equals("Component");
+                    && system.getComponents().getFirst().getName().equals("Component");
         }));
     }
 
     @Test
-    void insertRouter(@TempDir Path tempDir) {
+    void insertRouter(@TempDir Path tempDir) throws IOException {
         VirtualModel vsum = createVirtualModel(tempDir);
 
         addSystem(vsum, tempDir);
@@ -39,12 +40,12 @@ public class ModelIdentityViewTypeTest extends AbstractTest {
         Assertions.assertTrue(assertView(getView(vsum), (View v) -> {
             var system = v.getRootObjects(System.class).iterator().next();
             return system.getComponents().size() == 1
-                    && system.getComponents().get(0).getName().equals("Router");
+                    && system.getComponents().getFirst().getName().equals("Router");
         }));
     }
 
     @Test
-    void renameComponent(@TempDir Path tempDir) {
+    void renameComponent(@TempDir Path tempDir) throws IOException {
         VirtualModel vsum = createVirtualModel(tempDir);
 
         addSystem(vsum, tempDir);
@@ -52,23 +53,23 @@ public class ModelIdentityViewTypeTest extends AbstractTest {
 
         modifyView(getView(vsum).withChangeDerivingTrait(), (CommittableView v) -> {
             var system = v.getRootObjects(System.class).iterator().next();
-            system.getComponents().get(0).setName("NewName");
+            system.getComponents().getFirst().setName("NewName");
         });
 
         Assertions.assertTrue(assertView(getView(vsum), (View v) -> {
             var system = v.getRootObjects(System.class).iterator().next();
             return system.getComponents().size() == 1
-                    && system.getComponents().get(0).getName().equals("NewName");
+                    && system.getComponents().getFirst().getName().equals("NewName");
         }));
 
         Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(Root.class)), (View v) -> {
             var root = v.getRootObjects(Root.class).iterator().next();
-            return root.getEntities().get(0).getName().equals("NewName");
+            return root.getEntities().getFirst().getName().equals("NewName");
         }));
     }
 
     @Test
-    void deleteComponent(@TempDir Path tempDir) {
+    void deleteComponent(@TempDir Path tempDir) throws IOException {
         VirtualModel vsum = createVirtualModel(tempDir);
 
         addSystem(vsum, tempDir);
@@ -76,7 +77,7 @@ public class ModelIdentityViewTypeTest extends AbstractTest {
 
         modifyView(getView(vsum).withChangeDerivingTrait(), (CommittableView v) -> {
             var system = v.getRootObjects(System.class).iterator().next();
-            system.getComponents().remove(0);
+            system.getComponents().removeFirst();
         });
 
         Assertions.assertTrue(assertView(getView(vsum), (View v) -> {
@@ -91,7 +92,7 @@ public class ModelIdentityViewTypeTest extends AbstractTest {
     }
 
     @Test
-    void testLink(@TempDir Path tempDir) {
+    void testLink(@TempDir Path tempDir) throws IOException {
         VirtualModel vsum = createVirtualModel(tempDir);
 
         addSystem(vsum, tempDir);
@@ -118,13 +119,13 @@ public class ModelIdentityViewTypeTest extends AbstractTest {
         Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(Root.class)), (View v) -> {
             var root = v.getRootObjects(Root.class).iterator().next();
             return root.getLinks().size() == 1
-                    && root.getLinks().get(0).getEntities().size() == 2
-                    && root.getLinks().get(0).getEntities().stream()
+                    && root.getLinks().getFirst().getEntities().size() == 2
+                    && root.getLinks().getFirst().getEntities().stream()
                     .allMatch(c -> c.getName().startsWith("Component"));
         }));
     }
 
-    private VirtualModel createVirtualModel(Path tempDir) {
+    private VirtualModel createVirtualModel(Path tempDir) throws IOException {
         return createDefaultVirtualModel(tempDir, List.of(new ModelIdentityViewType()));
     }
 

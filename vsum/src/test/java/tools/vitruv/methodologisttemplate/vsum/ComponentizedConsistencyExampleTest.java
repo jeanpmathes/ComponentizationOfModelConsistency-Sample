@@ -16,27 +16,28 @@ import tools.vitruv.framework.vsum.internal.InternalVirtualModel;
 import tools.vitruv.methodologisttemplate.model.model.System;
 import tools.vitruv.methodologisttemplate.model.model2.Root;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
 public class ComponentizedConsistencyExampleTest extends AbstractTest {
     @Test
-    void insertComponentUsingViewBasedConsistency(@TempDir Path tempDir) {
+    void insertComponent(@TempDir Path tempDir) throws IOException {
         VirtualModel vsum = createVirtualModel(tempDir);
 
         addSystem(vsum, tempDir);
         addComponent(vsum);
 
         Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(System.class, Root.class)), (View v) -> {
-            var component = v.getRootObjects(System.class).iterator().next().getComponents().get(0);
-            var entity = v.getRootObjects(Root.class).iterator().next().getEntities().get(0);
+            var component = v.getRootObjects(System.class).iterator().next().getComponents().getFirst();
+            var entity = v.getRootObjects(Root.class).iterator().next().getEntities().getFirst();
 
             return component.getName().equals(entity.getName());
         }));
     }
 
-    private InternalVirtualModel createVirtualModel(Path projectPath) {
+    private InternalVirtualModel createVirtualModel(Path projectPath) throws IOException {
         InternalVirtualModel model = new VirtualModelBuilder()
                 .withStorageFolder(projectPath)
                 .withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(new TestUserInteraction()))

@@ -17,6 +17,7 @@ import tools.vitruv.framework.vsum.internal.InternalVirtualModel;
 import tools.vitruv.methodologisttemplate.model.model.ModelFactory;
 import tools.vitruv.methodologisttemplate.model.model.System;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
@@ -65,11 +66,11 @@ public class AbstractTest {
         });
     }
 
-    protected InternalVirtualModel createDefaultVirtualModel(Path projectPath) {
+    protected InternalVirtualModel createDefaultVirtualModel(Path projectPath) throws IOException {
         return createDefaultVirtualModel(projectPath, List.of());
     }
 
-    protected InternalVirtualModel createDefaultVirtualModel(Path projectPath, List<ViewType<?>> viewTypes) {
+    protected InternalVirtualModel createDefaultVirtualModel(Path projectPath, List<ViewType<?>> viewTypes) throws IOException {
         InternalVirtualModel model = new VirtualModelBuilder()
                 .withStorageFolder(projectPath)
                 .withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(new TestUserInteraction()))
