@@ -3,6 +3,7 @@ package tools.vitruv.methodologisttemplate.vsum;
 import neojoin.viewtypes.model_identity.ModelIdentityFactory;
 import neojoin.viewtypes.model_identity.ModelIdentityViewType;
 import neojoin.viewtypes.model_identity.System;
+import org.eclipse.emf.common.util.URI;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -123,6 +124,23 @@ public class ModelIdentityViewTypeTest extends AbstractTest {
                     && root.getLinks().getFirst().getEntities().stream()
                     .allMatch(c -> c.getName().startsWith("Component"));
         }));
+    }
+
+    protected void addSystem(VirtualModel vsum, Path projectPath) {
+        modifyView(getView(vsum).withChangeDerivingTrait(), (CommittableView v) -> {
+            var system = ModelIdentityFactory.eINSTANCE.createSystem();
+            v.registerRoot(system, URI.createFileURI(projectPath.toString() + "/example.view"));
+        });
+    }
+
+    protected void addComponent(VirtualModel vsum, String name) {
+        modifyView(getView(vsum).withChangeDerivingTrait(), (CommittableView v) -> {
+            var component = ModelIdentityFactory.eINSTANCE.createComponent();
+            component.setName(name);
+
+            var system = v.getRootObjects(System.class).iterator().next();
+            system.getComponents().add(component);
+        });
     }
 
     private VirtualModel createVirtualModel(Path tempDir) throws IOException {
