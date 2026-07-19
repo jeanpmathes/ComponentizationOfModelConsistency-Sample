@@ -3,6 +3,7 @@ package tools.vitruv.methodologisttemplate.vsum;
 import mir.reactions.model2Model2.Model2Model2ChangePropagationSpecification;
 import mir.reactions.model2ModelView2.Model2ModelView2ChangePropagationSpecification;
 import mir.reactions.modelView2Model2.ModelView2Model2ChangePropagationSpecification;
+import mir.reactions.modelView2ModelView2.ModelView2ModelView2ChangePropagationSpecification;
 import neojoin.viewtypes.model2_identity.Model2IdentityViewType;
 import neojoin.viewtypes.model_identity.ModelIdentityViewType;
 import org.junit.jupiter.api.Assertions;
@@ -13,10 +14,12 @@ import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.change.testutils.TestUserInteraction;
 import tools.vitruv.compmodelcons.change.ViewChangePropagationSpecificationAdapterFactory;
+import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.framework.vsum.VirtualModelBuilder;
 import tools.vitruv.framework.vsum.internal.InternalVirtualModel;
+import tools.vitruv.methodologisttemplate.model.model.ModelFactory;
 import tools.vitruv.methodologisttemplate.model.model.System;
 import tools.vitruv.methodologisttemplate.model.model2.Root;
 
@@ -47,7 +50,7 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
             );
             case VIEW_AS_SOURCE_AND_TARGET -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
                     Optional.of(new ModelIdentityViewType()),
-                    new Model2ModelView2ChangePropagationSpecification(),
+                    new ModelView2ModelView2ChangePropagationSpecification(),
                     Optional.of(new Model2IdentityViewType())
             );
         };
@@ -66,6 +69,58 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
             var entity = v.getRootObjects(Root.class).iterator().next().getEntities().getFirst();
 
             return component.getName().equals(entity.getName());
+        }));
+    }
+
+    @ParameterizedTest
+    @EnumSource(Configuration.class)
+    void removeComponent(Configuration configuration) throws IOException {
+        VirtualModel vsum = createVirtualModel(configuration);
+
+        addSystem(vsum, projectPath);
+        addComponent(vsum);
+
+        modifyView(getDefaultView(vsum, List.of(System.class)).withChangeDerivingTrait(), (CommittableView v) -> {
+            v.getRootObjects(System.class).iterator().next().getComponents().removeFirst();
+        });
+
+        Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(System.class, Root.class)), (View v) ->
+                v.getRootObjects(System.class).iterator().next().getComponents().isEmpty()
+                        && v.getRootObjects(Root.class).iterator().next().getEntities().isEmpty()));
+    }
+
+    @ParameterizedTest
+    @EnumSource(Configuration.class)
+    void testLink(Configuration configuration) throws IOException {
+        VirtualModel vsum = createVirtualModel(configuration);
+
+        addSystem(vsum, projectPath);
+
+        modifyView(getDefaultView(vsum, List.of(System.class)).withChangeDerivingTrait(), (CommittableView v) -> {
+            System system = v.getRootObjects(System.class).iterator().next();
+
+            var component1 = ModelFactory.eINSTANCE.createComponent();
+            component1.setName("component1");
+            var component2 = ModelFactory.eINSTANCE.createComponent();
+            component2.setName("component2");
+            system.getComponents().addAll(List.of(component1, component2));
+
+            var protocol = ModelFactory.eINSTANCE.createProtocol();
+            protocol.setName("exampleProtocol");
+            system.getProtocols().add(protocol);
+
+            var link = ModelFactory.eINSTANCE.createLink();
+            system.getLinks().add(link);
+            link.setProtocol(protocol);
+            link.getComponents().addAll(List.of(component1, component2));
+        });
+
+        Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(Root.class)), (View v) -> {
+            var root = v.getRootObjects(Root.class).iterator().next();
+            return root.getLinks().size() == 1
+                    && root.getLinks().getFirst().getEntities().size() == 2
+                    && root.getLinks().getFirst().getEntities().stream()
+                    .allMatch(c -> c.getName().startsWith("component"));
         }));
     }
 
