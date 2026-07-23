@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <!-- Build Parent -->
   <parent>
     <groupId>tools.vitruv</groupId>
     <artifactId>parent</artifactId>
-      <version>4.0.0</version>
+    <version>4.0.0</version>
   </parent>
 
   <!-- Project Information -->
@@ -18,7 +18,7 @@
   <packaging>pom</packaging>
 
   <name>Methodologist Template</name>
-  <description />
+  <description/>
 
   <!-- Modules -->
   <modules>
@@ -30,7 +30,7 @@
 
   <properties>
     <vitruv.version>4.0.1-compmodelcons-SNAPSHOT</vitruv.version>
-      <vitruv-change.version>4.0.1-compmodelcons-SNAPSHOT</vitruv-change.version>
+    <vitruv-change.version>4.0.1-compmodelcons-SNAPSHOT</vitruv-change.version>
   </properties>
 
   <dependencyManagement>
@@ -39,27 +39,27 @@
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.change.atomic</artifactId>
-          <version>${vitruv-change.version}</version>
+        <version>${vitruv-change.version}</version>
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.change.composite</artifactId>
-          <version>${vitruv-change.version}</version>
+        <version>${vitruv-change.version}</version>
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.change.interaction</artifactId>
-          <version>${vitruv-change.version}</version>
+        <version>${vitruv-change.version}</version>
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.change.propagation</artifactId>
-          <version>${vitruv-change.version}</version>
+        <version>${vitruv-change.version}</version>
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.change.testutils.integration</artifactId>
-          <version>${vitruv-change.version}</version>
+        <version>${vitruv-change.version}</version>
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
@@ -91,7 +91,7 @@
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
-          <version>6.1.1</version>
+        <version>6.1.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

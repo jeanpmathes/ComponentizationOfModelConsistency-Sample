@@ -29,6 +29,11 @@
             <artifactId>tools.vitruv.methodologisttemplate.consistency</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>tools.vitruv.methodologisttemplate.viewtype</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- Vitruvius dependencies -->
         <dependency>
@@ -52,6 +57,11 @@
             <groupId>tools.vitruv</groupId>
             <artifactId>tools.vitruv.framework.vsum</artifactId>
         </dependency>
+        <dependency>
+            <groupId>tools.vitruv.compmodelcons</groupId>
+            <artifactId>tools.vitruv.compmodelcons.views</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
 
         <!-- external dependencies -->
         <dependency>
@@ -62,18 +72,6 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>tools.vitruv.compmodelcons</groupId>
-            <artifactId>tools.vitruv.compmodelcons.views</artifactId>
-            <version>0.1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>tools.vitruv</groupId>
-            <artifactId>tools.vitruv.methodologisttemplate.viewtype</artifactId>
-            <version>0.1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
