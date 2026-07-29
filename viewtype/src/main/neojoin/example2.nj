@@ -1,10 +1,11 @@
-export example to "http://vitruv.tools/methodologisttemplate/example"
+export example2 to "http://vitruv.tools/methodologisttemplate/example2"
 
 import "http://vitruv.tools/methodologisttemplate/model"
 import "http://vitruv.tools/methodologisttemplate/model2"
 
 from Component c
-where true
+join Entity e
+where c.name == e.name
 create Thing {
     c.name
 }

@@ -37,13 +37,13 @@ public class ExampleViewTypeTest extends AbstractTest {
         modifyView(getView(vsum).withChangeDerivingTrait(), (CommittableView v) -> {
             Root root = v.getRootObjects(Root.class).iterator().next();
 
-            root.getAllThings().remove(0);
+            root.getAllThings().removeFirst();
         });
 
         Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(System.class)), (View v) -> {
             var system = v.getRootObjects(System.class).iterator().next();
             return system.getComponents().size() == 1
-                    && system.getComponents().get(0).getName().equals("Component2");
+                    && system.getComponents().getFirst().getName().equals("Component2");
         }));
     }
 
