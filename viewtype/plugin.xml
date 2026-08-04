@@ -38,4 +38,20 @@
             genModel="target/generated-sources/neojoin/ecore/example2/example2.genmodel"/>
   </extension>
 
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <!-- @generated example_empty -->
+    <package
+            uri="http://vitruv.tools/methodologisttemplate/example_empty"
+            class="neojoin.viewtypes.example_empty.ExampleEmptyPackage"
+            genModel="target/generated-sources/neojoin/ecore/example_empty/example_empty.genmodel"/>
+  </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <!-- @generated example_correspondence -->
+    <package
+            uri="http://vitruv.tools/methodologisttemplate/example_correspondence"
+            class="neojoin.viewtypes.example_correspondence.ExampleCorrespondencePackage"
+            genModel="target/generated-sources/neojoin/ecore/example_correspondence/example_correspondence.genmodel"/>
+  </extension>
+
 </plugin>

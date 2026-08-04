@@ -1,0 +1,10 @@
+export example_empty to "http://vitruv.tools/methodologisttemplate/example_empty"
+
+import "http://vitruv.tools/methodologisttemplate/model"
+import "http://vitruv.tools/methodologisttemplate/model2"
+
+from Component c
+join Entity e
+create root Thing {
+
+}
