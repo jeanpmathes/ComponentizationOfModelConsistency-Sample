@@ -34,7 +34,7 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
     @TempDir
     private Path projectPath;
 
-    private static List<ChangePropagationSpecification> getChangePropagationSpecifications(TestVariant variant) {
+    private static ChangePropagationSpecification getChangePropagationSpecifications(TestVariant variant) {
         return switch (variant.configuration()) {
             case NO_VIEW_USAGE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
                     Optional.empty(),
