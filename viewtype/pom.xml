@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -14,26 +14,26 @@
   <artifactId>tools.vitruv.methodologisttemplate.viewtype</artifactId>
 
   <name>Viewtype</name>
-  <description />
+  <description/>
 
   <dependencies>
-      <dependency>
-          <groupId>tools.vitruv.compmodelcons</groupId>
-          <artifactId>tools.vitruv.compmodelcons.views</artifactId>
-          <version>0.1.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-          <groupId>tools.vitruv</groupId>
-          <artifactId>tools.vitruv.methodologisttemplate.model</artifactId>
-          <version>0.1.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-          <groupId>tools.vitruv.compmodelcons</groupId>
-          <artifactId>tools.vitruv.compmodelcons.change</artifactId>
-          <version>0.1.0-SNAPSHOT</version>
-      </dependency>
+    <dependency>
+      <groupId>tools.vitruv.compmodelcons</groupId>
+      <artifactId>tools.vitruv.compmodelcons.views</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>tools.vitruv</groupId>
+      <artifactId>tools.vitruv.methodologisttemplate.model</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>tools.vitruv.compmodelcons</groupId>
+      <artifactId>tools.vitruv.compmodelcons.change</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+    </dependency>
 
-      <!-- Vitruvius dependencies -->
+    <!-- Vitruvius dependencies -->
     <dependency>
       <groupId>tools.vitruv</groupId>
       <artifactId>tools.vitruv.change.atomic</artifactId>
@@ -45,7 +45,7 @@
     <dependency>
       <groupId>tools.vitruv</groupId>
       <artifactId>tools.vitruv.framework.views</artifactId>
-        <version>${vitruv.version}</version>
+      <version>${vitruv.version}</version>
     </dependency>
   </dependencies>
 

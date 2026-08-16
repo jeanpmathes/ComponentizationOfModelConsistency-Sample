@@ -53,6 +53,8 @@ public class Example2ViewTypeTest extends AbstractTest {
     }
 
     private View getView(VirtualModel vsum) {
-        return vsum.createSelector(vsum.getViewTypes().stream().filter(viewType -> viewType.getName().equals(Example2ViewType.NAME)).findAny().orElseThrow()).createView();
+        return vsum.createSelector(vsum.getViewTypes().stream()
+                                       .filter(viewType -> viewType.getName().equals(Example2ViewType.NAME)).findAny()
+                                       .orElseThrow()).createView();
     }
 }

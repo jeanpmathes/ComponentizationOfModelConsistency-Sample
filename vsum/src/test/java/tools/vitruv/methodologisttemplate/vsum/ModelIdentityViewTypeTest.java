@@ -122,7 +122,7 @@ public class ModelIdentityViewTypeTest extends AbstractTest {
             return root.getLinks().size() == 1
                     && root.getLinks().getFirst().getEntities().size() == 2
                     && root.getLinks().getFirst().getEntities().stream()
-                    .allMatch(c -> c.getName().startsWith("Component"));
+                           .allMatch(c -> c.getName().startsWith("Component"));
         }));
     }
 
@@ -148,6 +148,8 @@ public class ModelIdentityViewTypeTest extends AbstractTest {
     }
 
     private View getView(VirtualModel vsum) {
-        return vsum.createSelector(vsum.getViewTypes().stream().filter(viewType -> viewType.getName().equals(ModelIdentityViewType.NAME)).findAny().orElseThrow()).createView();
+        return vsum.createSelector(vsum.getViewTypes().stream()
+                                       .filter(viewType -> viewType.getName().equals(ModelIdentityViewType.NAME))
+                                       .findAny().orElseThrow()).createView();
     }
 }

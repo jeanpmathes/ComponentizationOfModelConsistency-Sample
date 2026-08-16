@@ -19,7 +19,7 @@ public class ExampleCorrespondenceViewTypeTest extends AbstractTest {
 
         Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(Thing.class)),
                                          (View v) -> true
-        ));
+                                        ));
     }
 
     private VirtualModel createVirtualModel(Path tempDir) throws IOException {
@@ -28,10 +28,10 @@ public class ExampleCorrespondenceViewTypeTest extends AbstractTest {
 
     private View getView(VirtualModel vsum) {
         return vsum.createSelector(vsum.getViewTypes()
-                                           .stream()
-                                           .filter(viewType -> viewType.getName()
-                                                   .equals(ExampleCorrespondenceViewType.NAME))
-                                           .findAny()
-                                           .orElseThrow()).createView();
+                                       .stream()
+                                       .filter(viewType -> viewType.getName()
+                                                                   .equals(ExampleCorrespondenceViewType.NAME))
+                                       .findAny()
+                                       .orElseThrow()).createView();
     }
 }

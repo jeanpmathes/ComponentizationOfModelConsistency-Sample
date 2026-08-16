@@ -41,25 +41,25 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
                     new Model2Model2ChangePropagationSpecification(),
                     Optional.empty(),
                     variant.changeDeterminationMode()
-            );
+                                                                                                        );
             case VIEW_AS_SOURCE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
                     Optional.of(new ModelIdentityViewType()),
                     new ModelView2Model2ChangePropagationSpecification(),
                     Optional.empty(),
                     variant.changeDeterminationMode()
-            );
+                                                                                                         );
             case VIEW_AS_TARGET -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
                     Optional.empty(),
                     new Model2ModelView2ChangePropagationSpecification(),
                     Optional.of(new Model2IdentityViewType()),
                     variant.changeDeterminationMode()
-            );
+                                                                                                         );
             case VIEW_AS_SOURCE_AND_TARGET -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
                     Optional.of(new ModelIdentityViewType()),
                     new ModelView2ModelView2ChangePropagationSpecification(),
                     Optional.of(new Model2IdentityViewType()),
                     variant.changeDeterminationMode()
-            );
+                                                                                                                    );
         };
     }
 
@@ -119,7 +119,8 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
         });
 
         Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(System.class, Root.class)), (View v) ->
-                v.getRootObjects(System.class).iterator().next().getComponents().getFirst().getName().equals("NewName")));
+                v.getRootObjects(System.class).iterator().next().getComponents().getFirst().getName()
+                 .equals("NewName")));
     }
 
     @ParameterizedTest
@@ -153,7 +154,7 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
             return root.getLinks().size() == 1
                     && root.getLinks().getFirst().getEntities().size() == 2
                     && root.getLinks().getFirst().getEntities().stream()
-                    .allMatch(c -> c.getName().startsWith("component"));
+                           .allMatch(c -> c.getName().startsWith("component"));
         }));
     }
 

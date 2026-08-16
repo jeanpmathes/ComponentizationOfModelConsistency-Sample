@@ -49,7 +49,8 @@ public class AbstractTest {
         modifyView(view, (CommittableView v) -> {
             var component = ModelFactory.eINSTANCE.createComponent();
             component.setName(name);
-            v.getRootObjects(tools.vitruv.methodologisttemplate.model.model.System.class).iterator().next().getComponents().add(component);
+            v.getRootObjects(tools.vitruv.methodologisttemplate.model.model.System.class).iterator().next()
+             .getComponents().add(component);
         });
     }
 

@@ -60,9 +60,9 @@ public class VSUMExampleTest extends AbstractTest {
       // Note: to make the test result easier to understand, these different effects
       // should be tested one by one
       return v.getRootObjects(System.class).iterator().next()
-          .getComponents().get(0).getName()
-          .equals(v.getRootObjects(Root.class).iterator().next()
-              .getEntities().get(0).getName());
+              .getComponents().get(0).getName()
+              .equals(v.getRootObjects(Root.class).iterator().next()
+                       .getEntities().get(0).getName());
     }));
   }
 
@@ -79,9 +79,9 @@ public class VSUMExampleTest extends AbstractTest {
       // assert that the router has been added and that the corresponding entity has
       // been created
       return v.getRootObjects(System.class).iterator().next()
-          .getComponents().get(0).getName()
-          .equals(v.getRootObjects(Root.class).iterator().next()
-              .getEntities().get(0).getName());
+              .getComponents().get(0).getName()
+              .equals(v.getRootObjects(Root.class).iterator().next()
+                       .getEntities().get(0).getName());
     }));
   }
 
@@ -99,9 +99,9 @@ public class VSUMExampleTest extends AbstractTest {
       // assert that the renaming worked on the component as well as the corresponding
       // entity
       return v.getRootObjects(System.class).iterator().next()
-          .getComponents().get(0).getName().equals(newName)
-          && v.getRootObjects(Root.class).iterator().next()
-              .getEntities().get(0).getName().equals(newName);
+              .getComponents().get(0).getName().equals(newName)
+              && v.getRootObjects(Root.class).iterator().next()
+                  .getEntities().get(0).getName().equals(newName);
     }));
   }
 
@@ -117,7 +117,7 @@ public class VSUMExampleTest extends AbstractTest {
       // assert that the deletion of the component worked and that the corresponding
       // entity also got deleted
       return v.getRootObjects(System.class).iterator().next().getComponents().isEmpty()
-          && v.getRootObjects(Root.class).iterator().next().getEntities().isEmpty();
+              && v.getRootObjects(Root.class).iterator().next().getEntities().isEmpty();
     }));
   }
 
@@ -152,9 +152,9 @@ public class VSUMExampleTest extends AbstractTest {
     Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(Root.class)), (View v) -> {
       var root = v.getRootObjects(Root.class).iterator().next();
       return root.getLinks().size() == 1
-          && root.getLinks().get(0).getEntities().size() == 2
-          && root.getLinks().get(0).getEntities().stream()
-              .allMatch(c -> c.getName().startsWith("component"));
+              && root.getLinks().get(0).getEntities().size() == 2
+              && root.getLinks().get(0).getEntities().stream()
+                     .allMatch(c -> c.getName().startsWith("component"));
     }));
   }
 }
