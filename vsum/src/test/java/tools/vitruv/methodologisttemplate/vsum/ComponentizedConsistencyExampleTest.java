@@ -2,7 +2,6 @@ package tools.vitruv.methodologisttemplate.vsum;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import mir.reactions.model2Model2.Model2Model2ChangePropagationSpecification;
@@ -14,11 +13,10 @@ import neojoin.viewtypes.model_identity.ModelIdentityViewType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.change.testutils.TestUserInteraction;
-import tools.vitruv.compmodelcons.change.ChangeDeterminationMode;
 import tools.vitruv.compmodelcons.change.ViewChangePropagationSpecificationAdapterFactory;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
@@ -34,51 +32,32 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
   private Path projectPath;
 
   private static ChangePropagationSpecification getChangePropagationSpecifications(
-      TestVariant variant) {
-    return switch (variant.configuration()) {
+      Configuration configuration) {
+    return switch (configuration) {
       case NO_VIEW_USAGE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
           Optional.empty(),
           new Model2Model2ChangePropagationSpecification(),
-          Optional.empty(),
-          variant.changeDeterminationMode()
-                                                                                                  );
+          Optional.empty());
       case VIEW_AS_SOURCE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
           Optional.of(new ModelIdentityViewType()),
           new ModelView2Model2ChangePropagationSpecification(),
-          Optional.empty(),
-          variant.changeDeterminationMode()
-                                                                                                   );
+          Optional.empty());
       case VIEW_AS_TARGET -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
           Optional.empty(),
           new Model2ModelView2ChangePropagationSpecification(),
-          Optional.of(new Model2IdentityViewType()),
-          variant.changeDeterminationMode()
-                                                                                                   );
+          Optional.of(new Model2IdentityViewType()));
       case VIEW_AS_SOURCE_AND_TARGET ->
           ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
               Optional.of(new ModelIdentityViewType()),
               new ModelView2ModelView2ChangePropagationSpecification(),
-              Optional.of(new Model2IdentityViewType()),
-              variant.changeDeterminationMode()
-                                                                                );
+              Optional.of(new Model2IdentityViewType()));
     };
   }
 
-  private static List<TestVariant> getTestVariants() {
-    List<TestVariant> result = new ArrayList<>();
-    for (Configuration configuration : Configuration.values()) {
-      for (ChangeDeterminationMode changeDeterminationMode : List.of(
-          ChangeDeterminationMode.CHANGE_DERIVATION)) {
-        result.add(new TestVariant(configuration, changeDeterminationMode));
-      }
-    }
-    return result;
-  }
-
   @ParameterizedTest
-  @MethodSource("getTestVariants")
-  void insertComponent(TestVariant variant) throws IOException {
-    VirtualModel vsum = createVirtualModel(variant);
+  @EnumSource(Configuration.class)
+  void insertComponent(Configuration configuration) throws IOException {
+    VirtualModel vsum = createVirtualModel(configuration);
 
     addSystem(vsum, projectPath);
     addComponent(vsum);
@@ -105,9 +84,9 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
   }
 
   @ParameterizedTest
-  @MethodSource("getTestVariants")
-  void removeComponent(TestVariant variant) throws IOException {
-    VirtualModel vsum = createVirtualModel(variant);
+  @EnumSource(Configuration.class)
+  void removeComponent(Configuration configuration) throws IOException {
+    VirtualModel vsum = createVirtualModel(configuration);
 
     addSystem(vsum, projectPath);
     addComponent(vsum);
@@ -139,9 +118,9 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
   }
 
   @ParameterizedTest
-  @MethodSource("getTestVariants")
-  void renameComponent(TestVariant variant) throws IOException {
-    VirtualModel vsum = createVirtualModel(variant);
+  @EnumSource(Configuration.class)
+  void renameComponent(Configuration configuration) throws IOException {
+    VirtualModel vsum = createVirtualModel(configuration);
 
     addSystem(vsum, projectPath);
     addComponent(vsum, "OldName");
@@ -170,9 +149,9 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
   }
 
   @ParameterizedTest
-  @MethodSource("getTestVariants")
-  void testLink(TestVariant variant) throws IOException {
-    VirtualModel vsum = createVirtualModel(variant);
+  @EnumSource(Configuration.class)
+  void testLink(Configuration configuration) throws IOException {
+    VirtualModel vsum = createVirtualModel(configuration);
 
     addSystem(vsum, projectPath);
 
@@ -231,12 +210,12 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
     }));
   }
 
-  private InternalVirtualModel createVirtualModel(TestVariant variant) throws IOException {
+  private InternalVirtualModel createVirtualModel(Configuration configuration) throws IOException {
     InternalVirtualModel model = new VirtualModelBuilder()
         .withStorageFolder(projectPath)
         .withUserInteractorForResultProvider(
             new TestUserInteraction.ResultProvider(new TestUserInteraction()))
-        .withChangePropagationSpecifications(getChangePropagationSpecifications(variant))
+        .withChangePropagationSpecifications(getChangePropagationSpecifications(configuration))
         .buildAndInitialize();
     model.setChangePropagationMode(ChangePropagationMode.TRANSITIVE_CYCLIC);
     return model;
@@ -247,10 +226,5 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
     VIEW_AS_SOURCE,
     VIEW_AS_TARGET,
     VIEW_AS_SOURCE_AND_TARGET
-  }
-
-  private record TestVariant(Configuration configuration,
-                             ChangeDeterminationMode changeDeterminationMode) {
-
   }
 }
