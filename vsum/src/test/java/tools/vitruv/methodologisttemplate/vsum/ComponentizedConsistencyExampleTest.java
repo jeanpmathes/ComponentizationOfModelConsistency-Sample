@@ -34,20 +34,20 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
   private static ChangePropagationSpecification getChangePropagationSpecifications(
       Configuration configuration) {
     return switch (configuration) {
-      case NO_VIEW_USAGE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
+      case NO_VIEW_USAGE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
           Optional.empty(),
           new Model2Model2ChangePropagationSpecification(),
           Optional.empty());
-      case VIEW_AS_SOURCE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
+      case VIEW_AS_SOURCE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
           Optional.of(new ModelIdentityViewType()),
           new ModelView2Model2ChangePropagationSpecification(),
           Optional.empty());
-      case VIEW_AS_TARGET -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
+      case VIEW_AS_TARGET -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
           Optional.empty(),
           new Model2ModelView2ChangePropagationSpecification(),
           Optional.of(new Model2IdentityViewType()));
       case VIEW_AS_SOURCE_AND_TARGET ->
-          ViewChangePropagationSpecificationAdapterFactory.INSTANCE.createRemote(
+          ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
               Optional.of(new ModelIdentityViewType()),
               new ModelView2ModelView2ChangePropagationSpecification(),
               Optional.of(new Model2IdentityViewType()));
