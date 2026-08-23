@@ -1,0 +1,9 @@
+export vov_model2_identity to "http://vitruv.tools/methodologisttemplate/vov_model2_identity"
+
+import "http://vitruv.tools/methodologisttemplate/model2_identity"
+
+from Root r
+create root Root {
+    entities = r.entities
+    links = r.links
+}

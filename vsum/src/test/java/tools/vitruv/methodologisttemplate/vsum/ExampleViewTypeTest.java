@@ -142,7 +142,7 @@ public class ExampleViewTypeTest extends AbstractTest {
   }
 
   private VirtualModel createVirtualModel(Path tempDir) throws IOException {
-    return createDefaultVirtualModel(tempDir, List.of(new ExampleViewType()));
+    return createDefaultVirtualModel(tempDir, List.of(new ExampleViewType(null)));
   }
 
   private View getView(VirtualModel vsum) {

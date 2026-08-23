@@ -22,7 +22,7 @@ public class ExampleCorrespondenceViewTypeTest extends AbstractTest {
   }
 
   private VirtualModel createVirtualModel(Path tempDir) throws IOException {
-    return createDefaultVirtualModel(tempDir, List.of(new ExampleCorrespondenceViewType()));
+    return createDefaultVirtualModel(tempDir, List.of(new ExampleCorrespondenceViewType(null)));
   }
 
   private View getView(VirtualModel vsum) {

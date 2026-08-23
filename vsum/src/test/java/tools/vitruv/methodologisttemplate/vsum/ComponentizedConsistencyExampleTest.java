@@ -39,18 +39,18 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
           new Model2Model2ChangePropagationSpecification(),
           Optional.empty());
       case VIEW_AS_SOURCE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
-          Optional.of(new ModelIdentityViewType()),
+          Optional.of(new ModelIdentityViewType(null)),
           new ModelView2Model2ChangePropagationSpecification(),
           Optional.empty());
       case VIEW_AS_TARGET -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
           Optional.empty(),
           new Model2ModelView2ChangePropagationSpecification(),
-          Optional.of(new Model2IdentityViewType()));
+          Optional.of(new Model2IdentityViewType(null)));
       case VIEW_AS_SOURCE_AND_TARGET ->
           ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
-              Optional.of(new ModelIdentityViewType()),
+              Optional.of(new ModelIdentityViewType(null)),
               new ModelView2ModelView2ChangePropagationSpecification(),
-              Optional.of(new Model2IdentityViewType()));
+              Optional.of(new Model2IdentityViewType(null)));
     };
   }
 
