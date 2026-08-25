@@ -2,6 +2,7 @@ package tools.vitruv.methodologisttemplate.vsum;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import mir.reactions.model2Model2.Model2Model2ChangePropagationSpecification;
@@ -13,10 +14,11 @@ import neojoin.viewtypes.model_identity.ModelIdentityViewType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import tools.vitruv.change.propagation.ChangePropagationMode;
 import tools.vitruv.change.propagation.ChangePropagationSpecification;
 import tools.vitruv.change.testutils.TestUserInteraction;
+import tools.vitruv.compmodelcons.change.CorrespondenceTranslation;
 import tools.vitruv.compmodelcons.change.ViewChangePropagationSpecificationAdapterFactory;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
@@ -31,31 +33,26 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
   @TempDir
   private Path projectPath;
 
-  private static ChangePropagationSpecification getChangePropagationSpecifications(
-      Configuration configuration) {
-    return switch (configuration) {
-      case NO_VIEW_USAGE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
-          Optional.empty(),
-          new Model2Model2ChangePropagationSpecification(),
-          Optional.empty());
-      case VIEW_AS_SOURCE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
-          Optional.of(new ModelIdentityViewType(null)),
-          new ModelView2Model2ChangePropagationSpecification(),
-          Optional.empty());
-      case VIEW_AS_TARGET -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
-          Optional.empty(),
-          new Model2ModelView2ChangePropagationSpecification(),
-          Optional.of(new Model2IdentityViewType(null)));
-      case VIEW_AS_SOURCE_AND_TARGET ->
-          ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
-              Optional.of(new ModelIdentityViewType(null)),
-              new ModelView2ModelView2ChangePropagationSpecification(),
-              Optional.of(new Model2IdentityViewType(null)));
-    };
+  private static List<Configuration> getConfigurations() {
+    List<Configuration> configurations = new ArrayList<>();
+
+    for (SpecificationConfiguration specificationConfiguration :
+        SpecificationConfiguration.values()) {
+      for (CorrespondenceTranslation correspondenceTranslation :
+          CorrespondenceTranslation.values()) {
+        if (correspondenceTranslation.equals(CorrespondenceTranslation.NONE)) {
+          continue;
+        }
+        configurations.add(
+            new Configuration(specificationConfiguration, correspondenceTranslation));
+      }
+    }
+
+    return configurations;
   }
 
   @ParameterizedTest
-  @EnumSource(Configuration.class)
+  @MethodSource("getConfigurations")
   void insertComponent(Configuration configuration) throws IOException {
     VirtualModel vsum = createVirtualModel(configuration);
 
@@ -65,26 +62,69 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
     Assertions.assertTrue(
         assertView(getDefaultView(vsum, List.of(System.class, Root.class)), (View v) -> {
           var component = v
-              .getRootObjects(System.class)
-              .iterator()
-              .next()
-              .getComponents()
-              .getFirst();
+                              .getRootObjects(System.class)
+                              .iterator()
+                              .next()
+                              .getComponents()
+                              .getFirst();
           var entity = v
-              .getRootObjects(Root.class)
-              .iterator()
-              .next()
-              .getEntities()
-              .getFirst();
+                           .getRootObjects(Root.class)
+                           .iterator()
+                           .next()
+                           .getEntities()
+                           .getFirst();
 
           return component
-              .getName()
-              .equals(entity.getName());
+                     .getName()
+                     .equals(entity.getName());
         }));
   }
 
+  private InternalVirtualModel createVirtualModel(Configuration configuration) throws IOException {
+    InternalVirtualModel model = new VirtualModelBuilder()
+                                     .withStorageFolder(projectPath)
+                                     .withUserInteractorForResultProvider(
+                                         new TestUserInteraction.ResultProvider(
+                                             new TestUserInteraction()))
+                                     .withChangePropagationSpecifications(
+                                         getChangePropagationSpecifications(
+                                             configuration.specificationConfiguration(),
+                                             configuration.correspondenceTranslation()))
+                                     .buildAndInitialize();
+    model.setChangePropagationMode(ChangePropagationMode.TRANSITIVE_CYCLIC);
+    return model;
+  }
+
+  private static ChangePropagationSpecification getChangePropagationSpecifications(
+      SpecificationConfiguration specificationConfiguration,
+      CorrespondenceTranslation correspondenceTranslation) {
+    return switch (specificationConfiguration) {
+      case NO_VIEW_USAGE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
+          Optional.empty(),
+          new Model2Model2ChangePropagationSpecification(),
+          Optional.empty(),
+          correspondenceTranslation);
+      case VIEW_AS_SOURCE -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
+          Optional.of(new ModelIdentityViewType(null)),
+          new ModelView2Model2ChangePropagationSpecification(),
+          Optional.empty(),
+          correspondenceTranslation);
+      case VIEW_AS_TARGET -> ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
+          Optional.empty(),
+          new Model2ModelView2ChangePropagationSpecification(),
+          Optional.of(new Model2IdentityViewType(null)),
+          correspondenceTranslation);
+      case VIEW_AS_SOURCE_AND_TARGET ->
+          ViewChangePropagationSpecificationAdapterFactory.INSTANCE.create(
+              Optional.of(new ModelIdentityViewType(null)),
+              new ModelView2ModelView2ChangePropagationSpecification(),
+              Optional.of(new Model2IdentityViewType(null)),
+              correspondenceTranslation);
+    };
+  }
+
   @ParameterizedTest
-  @EnumSource(Configuration.class)
+  @MethodSource("getConfigurations")
   void removeComponent(Configuration configuration) throws IOException {
     VirtualModel vsum = createVirtualModel(configuration);
 
@@ -103,22 +143,24 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
 
     Assertions.assertTrue(
         assertView(getDefaultView(vsum, List.of(System.class, Root.class)), (View v) ->
-            v
-                .getRootObjects(System.class)
-                .iterator()
-                .next()
-                .getComponents()
-                .isEmpty()
-                && v
-                .getRootObjects(Root.class)
-                .iterator()
-                .next()
-                .getEntities()
-                .isEmpty()));
+                                                                                v
+                                                                                    .getRootObjects(
+                                                                                        System.class)
+                                                                                    .iterator()
+                                                                                    .next()
+                                                                                    .getComponents()
+                                                                                    .isEmpty()
+                                                                                    && v
+                                                                                           .getRootObjects(
+                                                                                               Root.class)
+                                                                                           .iterator()
+                                                                                           .next()
+                                                                                           .getEntities()
+                                                                                           .isEmpty()));
   }
 
   @ParameterizedTest
-  @EnumSource(Configuration.class)
+  @MethodSource("getConfigurations")
   void renameComponent(Configuration configuration) throws IOException {
     VirtualModel vsum = createVirtualModel(configuration);
 
@@ -138,18 +180,20 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
 
     Assertions.assertTrue(
         assertView(getDefaultView(vsum, List.of(System.class, Root.class)), (View v) ->
-            v
-                .getRootObjects(System.class)
-                .iterator()
-                .next()
-                .getComponents()
-                .getFirst()
-                .getName()
-                .equals("NewName")));
+                                                                                v
+                                                                                    .getRootObjects(
+                                                                                        System.class)
+                                                                                    .iterator()
+                                                                                    .next()
+                                                                                    .getComponents()
+                                                                                    .getFirst()
+                                                                                    .getName()
+                                                                                    .equals(
+                                                                                        "NewName")));
   }
 
   @ParameterizedTest
-  @EnumSource(Configuration.class)
+  @MethodSource("getConfigurations")
   void testLink(Configuration configuration) throws IOException {
     VirtualModel vsum = createVirtualModel(configuration);
 
@@ -158,9 +202,9 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
     modifyView(getDefaultView(vsum, List.of(System.class)).withChangeDerivingTrait(),
                (CommittableView v) -> {
                  System system = v
-                     .getRootObjects(System.class)
-                     .iterator()
-                     .next();
+                                     .getRootObjects(System.class)
+                                     .iterator()
+                                     .next();
 
                  var component1 = ModelFactory.eINSTANCE.createComponent();
                  component1.setName("component1");
@@ -188,43 +232,37 @@ public class ComponentizedConsistencyExampleTest extends AbstractTest {
 
     Assertions.assertTrue(assertView(getDefaultView(vsum, List.of(Root.class)), (View v) -> {
       var root = v
-          .getRootObjects(Root.class)
-          .iterator()
-          .next();
+                     .getRootObjects(Root.class)
+                     .iterator()
+                     .next();
       return root
-          .getLinks()
-          .size() == 1
-          && root
-          .getLinks()
-          .getFirst()
-          .getEntities()
-          .size() == 2
-          && root
-          .getLinks()
-          .getFirst()
-          .getEntities()
-          .stream()
-          .allMatch(c -> c
-              .getName()
-              .startsWith("component"));
+                 .getLinks()
+                 .size() == 1
+                 && root
+                        .getLinks()
+                        .getFirst()
+                        .getEntities()
+                        .size() == 2
+                 && root
+                        .getLinks()
+                        .getFirst()
+                        .getEntities()
+                        .stream()
+                        .allMatch(c -> c
+                                           .getName()
+                                           .startsWith("component"));
     }));
   }
 
-  private InternalVirtualModel createVirtualModel(Configuration configuration) throws IOException {
-    InternalVirtualModel model = new VirtualModelBuilder()
-        .withStorageFolder(projectPath)
-        .withUserInteractorForResultProvider(
-            new TestUserInteraction.ResultProvider(new TestUserInteraction()))
-        .withChangePropagationSpecifications(getChangePropagationSpecifications(configuration))
-        .buildAndInitialize();
-    model.setChangePropagationMode(ChangePropagationMode.TRANSITIVE_CYCLIC);
-    return model;
-  }
-
-  enum Configuration {
+  enum SpecificationConfiguration {
     NO_VIEW_USAGE,
     VIEW_AS_SOURCE,
     VIEW_AS_TARGET,
     VIEW_AS_SOURCE_AND_TARGET
+  }
+
+  private record Configuration(SpecificationConfiguration specificationConfiguration,
+                               CorrespondenceTranslation correspondenceTranslation) {
+
   }
 }
