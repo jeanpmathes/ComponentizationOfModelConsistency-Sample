@@ -8,7 +8,6 @@ import mir.reactions.modelView2ModelView2.ModelView2ModelView2ChangePropagationS
 import neojoin.viewtypes.example.ExampleViewType;
 import neojoin.viewtypes.model2_identity.Model2IdentityViewType;
 import neojoin.viewtypes.model_identity.ModelIdentityViewType;
-import mir.reactions.model2Model2.Model2Model2ChangePropagationSpecification;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
@@ -23,7 +22,6 @@ import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.View;
 import tools.vitruv.framework.views.ViewTypeFactory;
 import tools.vitruv.framework.vsum.VirtualModel;
-import tools.vitruv.framework.vsum.VirtualModelBuilder;
 import tools.vitruv.framework.vsum.VirtualModelBuilder;
 import tools.vitruv.methodologisttemplate.model.model.ModelFactory;
 
@@ -129,6 +127,16 @@ public class VSUMExample {
   private static View getDefaultView(VirtualModel vsum) {
     var selector = vsum.createSelector(ViewTypeFactory.createIdentityMappingViewType("default"));
     selector.getSelectableElements().forEach(it -> selector.setSelected(it, true));
+    return selector.createView();
+  }
+
+  private static View getExampleView(VirtualModel vsum) {
+    var viewtype = vsum.getViewTypes()
+                       .stream()
+                       .filter(vt -> vt.getName().equals(ExampleViewType.NAME))
+                       .findFirst()
+                       .orElseThrow();
+    var selector = vsum.createSelector(viewtype);
     return selector.createView();
   }
 
